@@ -1,6 +1,7 @@
+import { ChangeEvent } from "react"
 
 import { AppBar, Button, TextField, Toolbar, Typography, } from "@mui/material"
-import { Menu } from "@mui/icons-material"
+import { Menu, Search } from "@mui/icons-material"
 
 import './style.scss'
 const displayOnlyOnMedium = {display:{
@@ -19,21 +20,29 @@ const searchFieldSize = {
 
 
 interface Props {
-    setDrawerOpen?: (p: boolean) => void
+    setDrawerOpen: (p: boolean) => void
+    setSearch: (p: string) => void
 }
 
+type SearchChangeEvent = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 
-function Navbar({setDrawerOpen}: Props) {
+
+function Navbar({setDrawerOpen, setSearch}: Props) {
+
+function handleSearch(event: SearchChangeEvent) {
+    if(event.currentTarget.value === "" && setSearch) setSearch("")
+    if(event.currentTarget.value.length < 3) return
+    setSearch(event.currentTarget.value)
+}
+
     return <AppBar position="static">
         <Toolbar className="toolbar">
             <Button className="menuButton" onClick={() => setDrawerOpen && setDrawerOpen(true)}>
                 <Menu /><Typography variant="body1" color={"white"} sx={displayOnlyOnMedium}>Menu</Typography>
             </Button>
-            <TextField placeholder="Cerca..." size="small" className="search" sx={searchFieldSize}></TextField>
+            <TextField onChange={handleSearch} placeholder="Cerca..." size="small" className="search" sx={searchFieldSize}></TextField>
             <Typography variant="h6" sx={displayOnlyOnMedium}>Musa eCommerce</Typography>
         </Toolbar>
     </AppBar>
 }
 export default Navbar
-
-//min 32 lezi 59

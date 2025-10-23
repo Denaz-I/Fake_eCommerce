@@ -9,6 +9,7 @@ import { Product } from "../../types/Product.types"
 
 interface Props {
     product: Product
+    setCartItem?: (p: Product) => void
 }
 
 const MECCardMedia = styled(CardMedia)`
@@ -16,18 +17,18 @@ const MECCardMedia = styled(CardMedia)`
     `
 const MECCardHeader = styled(CardHeader)`
     & span {
-        text-overflow: ${ props => props.isLong ? 'ellipsis': 'hidden'};
+        text-overflow: ${ props => props.islong === "yes" ? 'ellipsis': 'hidden'};
     }
 `
 
-function ProductCard({product}: Props)  {
+function ProductCard({product, setCartItem}: Props)  {
     const theme  = useTheme();
     const { title, description, thumbnail} = product
     const isMD  = useMediaQuery(theme.breakpoints.up("md"));
     const headerClassName = isMD ? "cardHeadrMD" : "cardHeaderXS"
 
     return <Card className="card" sx={{height:{xs:"420px", md:"600px"}}}>
-        <MECCardHeader title={title} className={headerClassName} isLong={title?.lenght > 22}  />
+        <MECCardHeader title={title} className={headerClassName} islong={title?.length > 22 ? "yes" : "no"}  />
         <MECCardMedia component="img"
         image={thumbnail}
         alt = {title}
@@ -36,7 +37,7 @@ function ProductCard({product}: Props)  {
             <Typography>{description}</Typography>
         </CardContent>
         <CardActions>
-            <Button>
+            <Button onClick={() => setCartItem(product)}>
                 <ShoppingBasket color="primary" sx={{marginRight:"4px"}}/>Aggiungi
             </Button>
         </CardActions>
