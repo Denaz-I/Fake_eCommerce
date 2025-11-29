@@ -12,7 +12,7 @@ function PageNotFound() {
     return <Paper elevation={3} sx={{ padding: "24px", minHeight: "800px", margin: "40px"}}>
         <Typography variant="h1" component="h1">Pagina non trovata</Typography>
         <Typography variant="body1">La pagina che stai cercando non esiste.
-            Questo è un progetto fatto per i Corsi di <Evidenzia variant="span">Musa Formazione</Evidenzia>
+            Questo è un progetto fatto per i Corsi di <Evidenzia variant="span">Musa Formazione</Evidenzia>, ho provato a modificarlo un minimo io, spero vi piaccia
         </Typography>
     </Paper>
 }
