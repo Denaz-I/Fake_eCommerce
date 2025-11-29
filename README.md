@@ -1,35 +1,23 @@
-<<<<<<< HEAD
-# mec-ts
-Demo site to learn React + Typescript
-=======
-# React + TypeScript + Vite
+# Musa eCommerce - Frontend Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React and TypeScript fake eCommerce frontend built as part of my web development course.  
+I enhanced the original project to improve functionality, fix bugs, and optimize user experience.
 
-Currently, two official plugins are available:
+## Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Browse and search products with live filtering.
+- Add and remove products in the cart.
+- Display total price with proper formatting.
+- Responsive design using Material-UI.
+- Drawer with fixed width for the shopping cart.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React + TypeScript
+- Material-UI
+- SCSS
+- UUID
 
-- Configure the top-level `parserOptions` property like this:
+## Purpose
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
->>>>>>> 6379b9d (inizializzazione progetto react+typescript)
+This project demonstrates my skills learned during the course and ability to improve and debug existing code.
