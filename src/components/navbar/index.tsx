@@ -41,7 +41,7 @@ function handleSearch(event: SearchChangeEvent) {
                 <Menu /><Typography variant="body1" color={"white"} sx={displayOnlyOnMedium}>Menu</Typography>
             </Button>
             <TextField onChange={handleSearch} placeholder="Cerca..." size="small" className="search" sx={searchFieldSize}></TextField>
-            <Typography variant="h6" sx={displayOnlyOnMedium}>Musa eCommerce</Typography>
+            <Typography variant="h6" sx={displayOnlyOnMedium}>Den eCommerce</Typography>
         </Toolbar>
     </AppBar>
     <Toolbar />
