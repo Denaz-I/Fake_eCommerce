@@ -1,71 +1,60 @@
-import { useEffect, useState } from "react";
-import { Drawer, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import { ShoppingBasket } from "@mui/icons-material";
 import RemoveCircle from "@mui/icons-material/RemoveCircle";
+import {v4 as uuidv4} from "uuid";
 
 
 import Navbar from "../components/navbar"
 import ProductList from "../components/productList";
 import { Product } from "../types/Product.types"
+import { ProductsContext } from "../App";
 
-async function fetchProducts(setProducts: (products: Product[]) => void ) {
-    const response = await fetch("https://dummyjson.com/products")
-    const data = await response.json()
-    setProducts(data.products)
-}
+
 
 function Home(){
-    const [open, setOpen] = useState(false)
-    const [search, setSearch] = useState("")
-    const [products, setProducts] = useState([])
-    const [filteredProducts, setFilteredProducts] = useState([])
-    const [cart, setCart] = useState([])
-    const [cartItem, setCartItem] = useState()
+    interface CartItem{
+        product: Product
+        uuid: string
+    }
 
-    
-    useEffect(() => {
-        fetchProducts(setProducts)
-        const oldCart = window.localStorage.getItem("cart")
-        if (oldCart) setCart(JSON.parse(oldCart))
-    }, [])
-    
-    useEffect(() =>{
-        setFilteredProducts(products)
-    }, [products])
+    const shortText = (text: string, max: number) =>
+    text.length > max ? text.slice(0, max) + "...":text;
+
+
+    const [open, setOpen] = useState<boolean>(false)
+    const [search, setSearch] = useState<string>("")
+    const [cart, setCart] = useState<CartItem[]>([])
+    const products=useContext<Product[]>(ProductsContext)
 
     useEffect(() => {
         if(cart) {
-            window.localStorage.setItem("cart", JSON.stringify(cart))
+            globalThis.localStorage.setItem("cart", JSON.stringify(cart))
         }
     }, [cart])
 
-    useEffect(() =>{
-        if(cartItem) setCart([...cart, cartItem])
-    }, [cartItem]
-        
-    )
-    useEffect(() => {
-        setFilteredProducts(
-            products.filter((p: Product) => p.title.toLowerCase().includes(search.toLowerCase()))
-        )
-    }, [search])
-
-    function handleRemoveItem(id: number) {
-        setCart(cart.filter((p: Product) => p.id !== id))
+    function addToCart(product: Product) {
+        setCart(prev => [...prev, {product, uuid: uuidv4()}]);
     }
 
-        return <Grid container spacing={2} fixed="true">
+    const filteredProducts = useMemo(() => {
+            return products?.filter( (p: Product) => p.title.toLowerCase().includes(search.toLowerCase()))
+    }, [search, products])
+
+    function handleRemoveItem(uuid: string) {
+        setCart(cart.filter(p => p.uuid !== uuid));
+    }
+
+        return <Grid container spacing={2} component="div">
         <Grid item xs={12}>
             <Navbar setDrawerOpen={setOpen} setSearch={setSearch} />
         </Grid>
         <Grid item xs={0} md={2}></Grid>
         <Grid item xs={12} md={8}>
-            {/* <Products /> questo da usare con redux */}
-            {/* {products?.map((product:Product) => <div key={product.id}>{product.title}</div>)}  //stampa solo titolo */}
-            <ProductList products={filteredProducts} setCartItem={setCartItem}/>
+            <ProductList products={filteredProducts} addToCart={addToCart}/>
         </Grid>
         <Grid item xs={0} md={2}></Grid>
-        <Drawer open={open} onClose={() => setOpen(false)}>
+        <Drawer open={open} onClose={() => setOpen(false)} sx={{maxWidth:"40vw"}}>
             <List>
                 <ListItem>
                         <Typography variant="h5" sx={{marginRight:"16px"}}>Carrello</Typography>
@@ -74,16 +63,16 @@ function Home(){
                         </ListItemIcon>
                 </ListItem>
                 {cart.map(
-                    (p:Product) => <ListItem key={p.id}>
-                        <ListItemText primary={p.title}/>
-                        <ListItemText secondary={p.price} sx={{marginLeft:"16px", marginRight:"16px"}}/>
-                        <IconButton onClick={() => handleRemoveItem(p.id)}><RemoveCircle /></IconButton>    
-                    </ListItem> )
+                    p => (<ListItem key={p.uuid}>
+                        <ListItemText primary={shortText(p.product.title, 18)}/>
+                        <ListItemText secondary={p.product.price} sx={{marginLeft:"16px", marginRight:"16px"}}/>
+                        <IconButton onClick={() => handleRemoveItem(p.uuid)}><RemoveCircle /></IconButton>    
+                    </ListItem> ))
                 }
                 <ListItem>
                     <ListItemText primary="Totale" />
                     <ListItemText sx={{fontWeight:"bold", color:"red"}}
-                        primary={cart.reduce((p, c:Product) => p+c.price, 0)} />
+                        primary={Math.round(cart.reduce((p, c:CartItem) => p+c.product.price, 0) * 100) / 100} />
                 </ListItem>
             </List>
 
